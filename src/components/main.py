@@ -142,22 +142,35 @@ class Main(QtWidgets.QWidget):
     def _make_toolbar(self):
         bar = QtWidgets.QToolBar()
 
+        # Create, and attach mesh drop down selector. 
         self.mesh_combo = QtWidgets.QComboBox()
         for i in range(11):
             self.mesh_combo.addItem(['Sea-0', 'Sea-1', 'Sea-2','Sea-3', 'Land', 'Grass', 'Sand', 'Shallows', 'Snow', 'Gravel', 'Rock'][i])
+        
         self.mesh_combo.currentIndexChanged.connect(self._on_mesh_changed)
         bar.addWidget(QtWidgets.QLabel(" Active: "))
         bar.addWidget(self.mesh_combo)
         bar.addSeparator()
 
-        add_vert = QtGui.QAction("Add Vertex", bar)
+        # Add buttons for all available tools
+        add_vert = QtGui.QAction(bar)
+        add_vert.setIcon(self.style().standardIcon(QtWidgets.QStyle.SP_DialogYesButton))
         add_vert.setCheckable(True)
+        add_vert.setToolTip("Add Vertex")
 
-        make_tri = QtGui.QAction("Make Triangle", bar)
+        make_tri = QtGui.QAction(bar)
+        make_tri.setIcon(self.style().standardIcon(QtWidgets.QStyle.SP_TitleBarShadeButton))
         make_tri.setCheckable(True)
-        del_last_tri = QtGui.QAction("Delete Last Triangle", bar)
-        reset_view = QtGui.QAction("Reset View", bar)
+        make_tri.setToolTip("Make Triangle")
 
+        del_last_tri = QtGui.QAction(bar)
+        del_last_tri.setIcon(self.style().standardIcon(QtWidgets.QStyle.SP_TrashIcon))
+        del_last_tri.setToolTip("Delete Last Triangle")
+
+        reset_view = QtGui.QAction(bar)
+        reset_view.setIcon(self.style().standardIcon(QtWidgets.QStyle.SP_BrowserReload))
+        reset_view.setToolTip("Reset View")
+        
         def on_add_vertex_toggled(checked):
             self.adding_vertex = checked
             self.ghost_item.setVisible(checked)
