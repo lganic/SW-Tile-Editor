@@ -6,7 +6,7 @@ from .preview_widget import PreviewWidget
 from .items import VertexItem
 from .items import TriangleItem
 from ..utility import darklight_from_lightcolor
-from ..constants import RENDER_ORDER
+from ..constants import RENDER_ORDER, SNAP_AMOUNTS
 
 from PySide6 import QtCore, QtGui, QtWidgets, Shiboken
 
@@ -150,6 +150,14 @@ class Main(QtWidgets.QWidget):
         self.mesh_combo.currentIndexChanged.connect(self._on_mesh_changed)
         bar.addWidget(QtWidgets.QLabel(" Active: "))
         bar.addWidget(self.mesh_combo)
+        bar.addSeparator()
+
+        self.snap_combo = QtWidgets.QComboBox()
+        for snap_amount in SNAP_AMOUNTS:
+            self.snap_combo.addItem(str(snap_amount))
+        
+        bar.addWidget(QtWidgets.QLabel(" Snap: "))
+        bar.addWidget(self.snap_combo)
         bar.addSeparator()
 
         # Add buttons for all available tools
