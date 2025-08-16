@@ -6,7 +6,7 @@ from .preview_widget import PreviewWidget
 from .items import VertexItem
 from .items import TriangleItem
 
-from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets, Shiboken
 
 from sw_ducky import MapGeometry
 
@@ -287,7 +287,35 @@ class Main(QtWidgets.QWidget):
         self._rebuild_scene_all()
 
     def _rebuild_scene_all(self):
+
+        overlay = None
+        if getattr(self, "overlay", None) and Shiboken.isValid(self.overlay):
+            if self.overlay.scene() is self.scene:
+                self.scene.removeItem(self.overlay)
+            overlay = self.overlay
+
+        ghost = None
+        if getattr(self, "ghost_item", None) and Shiboken.isValid(self.ghost_item):
+            if self.ghost_item.scene() is self.scene:
+                self.scene.removeItem(self.ghost_item)
+            ghost = self.ghost_item
+
         self.scene.clear()
+
+        if ghost and Shiboken.isValid(ghost):
+            self.scene.addItem(ghost)
+            self.ghost_item = ghost
+        else:
+            self.ghost_item = QtWidgets.QGraphicsEllipseItem()
+            self.scene.addItem(self.ghost_item)
+
+        if overlay and Shiboken.isValid(overlay):
+            self.scene.addItem(overlay)
+            self.overlay = overlay
+        else:
+            self.overlay = PreviewOverlay()
+            self.scene.addItem(self.overlay)
+
         self.scene.addItem(GridBackground())
         for lst in self.mesh_vertex_items: lst.clear()
         for lst in self.mesh_triangle_items: lst.clear()
