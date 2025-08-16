@@ -50,7 +50,7 @@ class Main(QtWidgets.QWidget):
         pen = QtGui.QPen(QtGui.QColor("red"), 2, QtCore.Qt.DashLine)
         pen.setCosmetic(True)
         self.border_item.setPen(pen)
-        self.border_item.setZValue(0.5)
+        self.border_item.setZValue(100)
         self.border_item.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, False)
         self.border_item.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, False)
         self.scene.addItem(self.border_item)
