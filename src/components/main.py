@@ -20,7 +20,7 @@ class Main(QtWidgets.QWidget):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Triangle Mesh Editor (11 meshes)")
+        self.setWindowTitle("SW Mesh Editor (WIP)")
 
         # 11 models
         self.models: list[MeshModel] = [MeshModel() for _ in range(11)]
