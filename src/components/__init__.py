@@ -2,6 +2,6 @@
 
 from . import items
 
-from . import model
-from . import grid_background
-from . import editor_view
+from .model import MeshModel
+from .grid_background import GridBackground
+from .editor_view import EditorView

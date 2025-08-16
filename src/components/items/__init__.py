@@ -1,4 +1,4 @@
 # List of all item related classes
 
-from . import vertex
-from . import triangle
+from .vertex import VertexItem
+from .triangle import TriangleItem
