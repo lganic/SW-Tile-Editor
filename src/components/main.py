@@ -164,10 +164,6 @@ class Main(QtWidgets.QWidget):
         make_tri.setCheckable(True)
         make_tri.setToolTip("Make Triangle")
 
-        del_last_tri = QtGui.QAction(bar)
-        del_last_tri.setIcon(self.style().standardIcon(QtWidgets.QStyle.SP_TrashIcon))
-        del_last_tri.setToolTip("Delete Last Triangle")
-
         reset_view = QtGui.QAction(bar)
         reset_view.setIcon(self.style().standardIcon(QtWidgets.QStyle.SP_BrowserReload))
         reset_view.setToolTip("Reset View")
@@ -191,15 +187,6 @@ class Main(QtWidgets.QWidget):
             self._update_triangle_cursor(checked)
             self.overlay.update()
 
-        def on_delete_last_tri():
-            if not self.models[self.active_mesh].triangles():
-                return
-            lst = self.mesh_triangle_items[self.active_mesh]
-            last_item = lst.pop() if lst else None
-            if last_item:
-                self.scene.removeItem(last_item)
-            self.models[self.active_mesh].delete_last_triangle()
-
         def on_reset_view():
             v = next((vw for vw in self.scene.views()), None)
             if v:
@@ -211,13 +198,11 @@ class Main(QtWidgets.QWidget):
 
         add_vert.toggled.connect(on_add_vertex_toggled)
         make_tri.toggled.connect(on_make_tri_toggled)
-        del_last_tri.triggered.connect(on_delete_last_tri)
         reset_view.triggered.connect(on_reset_view)
 
         bar.addAction(add_vert)
         bar.addSeparator()
         bar.addAction(make_tri)
-        bar.addAction(del_last_tri)
         bar.addSeparator()
         bar.addAction(reset_view)
         return bar

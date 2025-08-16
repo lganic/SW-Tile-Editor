@@ -33,8 +33,3 @@ class MeshModel(QtCore.QObject):
             return
         self._tris.append((i, j, k))
         self.changed.emit()
-
-    def delete_last_triangle(self):
-        if self._tris:
-            self._tris.pop()
-            self.changed.emit()
