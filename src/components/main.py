@@ -310,20 +310,6 @@ class Main(QtWidgets.QWidget):
 
         self.scene.clear()
 
-        if ghost and Shiboken.isValid(ghost):
-            self.scene.addItem(ghost)
-            self.ghost_item = ghost
-        else:
-            self.ghost_item = QtWidgets.QGraphicsEllipseItem()
-            self.scene.addItem(self.ghost_item)
-
-        if overlay and Shiboken.isValid(overlay):
-            self.scene.addItem(overlay)
-            self.overlay = overlay
-        else:
-            self.overlay = PreviewOverlay()
-            self.scene.addItem(self.overlay)
-
         self.scene.addItem(GridBackground())
         for lst in self.mesh_vertex_items: lst.clear()
         for lst in self.mesh_triangle_items: lst.clear()
@@ -349,9 +335,19 @@ class Main(QtWidgets.QWidget):
         self.scene.addItem(border_rect)
         self.border_item = border_rect
 
-        # re-add helper items (overlay above all; ghost below it)
-        self.scene.addItem(self.overlay)
-        self.scene.addItem(self.ghost_item)
+        if ghost and Shiboken.isValid(ghost):
+            self.scene.addItem(ghost)
+            self.ghost_item = ghost
+        else:
+            self.ghost_item = QtWidgets.QGraphicsEllipseItem()
+            self.scene.addItem(self.ghost_item)
+
+        if overlay and Shiboken.isValid(overlay):
+            self.scene.addItem(overlay)
+            self.overlay = overlay
+        else:
+            self.overlay = PreviewOverlay()
+            self.scene.addItem(self.overlay)
 
         self._apply_active_mesh_flags()
 
