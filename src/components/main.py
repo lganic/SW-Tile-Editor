@@ -146,7 +146,9 @@ class Main(QtWidgets.QWidget):
 
             icon = QtGui.QIcon(pm)
             self.mesh_combo.addItem(icon, mesh_name)
-        
+
+        self.mesh_combo.setMinimumWidth(120)
+
         self.mesh_combo.currentIndexChanged.connect(self._on_mesh_changed)
         bar.addWidget(QtWidgets.QLabel(" Active: "))
         bar.addWidget(self.mesh_combo)
