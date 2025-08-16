@@ -343,7 +343,11 @@ class Main(QtWidgets.QWidget):
                 self.mesh_vertex_items[mi].append(v_item)
 
         border_rect = QtWidgets.QGraphicsRectItem(-500, -500, 1000, 1000)
-        border_rect.setPen(QtGui.QPen(QtGui.QColor("red"), 2, QtCore.Qt.DashLine))
+
+        border_rect_pen = QtGui.QPen(QtGui.QColor("red"), 2, QtCore.Qt.DashLine)
+        border_rect_pen.setCosmetic(True)
+
+        border_rect.setPen(border_rect_pen)
         border_rect.setZValue(100)
         self.scene.addItem(border_rect)
         self.border_item = border_rect
