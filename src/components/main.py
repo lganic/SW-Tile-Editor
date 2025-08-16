@@ -6,6 +6,7 @@ from .preview_widget import PreviewWidget
 from .items import VertexItem
 from .items import TriangleItem
 from ..utility import darklight_from_lightcolor
+from ..constants import RENDER_ORDER
 
 from PySide6 import QtCore, QtGui, QtWidgets, Shiboken
 
@@ -89,11 +90,9 @@ class Main(QtWidgets.QWidget):
 
         self.editor.deletePressed.connect(self.delete_selected)
 
-        LAYER_RENDER_ORDER = ['Sea-0', 'Sea-1', 'Sea-2','Sea-3', 'Land', 'Grass', 'Sand', 'Shallows', 'Snow', 'Gravel', 'Rock']
-
         map_geo = MapGeometry.from_file('arid.bin')
 
-        for index, key in enumerate(LAYER_RENDER_ORDER):
+        for index, key in enumerate(RENDER_ORDER):
 
             for x, y in map_geo.terrain_vertices[key]:
                 self._add_vertex_item(index, QtCore.QPointF(x, y))
@@ -146,7 +145,7 @@ class Main(QtWidgets.QWidget):
         # Create, and attach mesh drop down selector. 
         self.mesh_combo = QtWidgets.QComboBox()
         for i in range(11):
-            self.mesh_combo.addItem(['Sea-0', 'Sea-1', 'Sea-2','Sea-3', 'Land', 'Grass', 'Sand', 'Shallows', 'Snow', 'Gravel', 'Rock'][i])
+            self.mesh_combo.addItem(RENDER_ORDER[i])
         
         self.mesh_combo.currentIndexChanged.connect(self._on_mesh_changed)
         bar.addWidget(QtWidgets.QLabel(" Active: "))

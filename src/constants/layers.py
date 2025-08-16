@@ -1,0 +1,1 @@
+RENDER_ORDER = ['Sea-0', 'Sea-1', 'Sea-2','Sea-3', 'Land', 'Grass', 'Sand', 'Shallows', 'Snow', 'Gravel', 'Rock']
