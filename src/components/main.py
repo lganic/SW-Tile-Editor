@@ -138,8 +138,14 @@ class Main(QtWidgets.QWidget):
 
         # Create, and attach mesh drop down selector. 
         self.mesh_combo = QtWidgets.QComboBox()
-        for mesh_name in RENDER_ORDER:
-            self.mesh_combo.addItem(mesh_name)
+        for mesh_name, mesh_color in zip(RENDER_ORDER, LAYER_COLORS):
+
+            # make a small square pixmap
+            pm = QtGui.QPixmap(16, 16)
+            pm.fill(mesh_color)
+
+            icon = QtGui.QIcon(pm)
+            self.mesh_combo.addItem(icon, mesh_name)
         
         self.mesh_combo.currentIndexChanged.connect(self._on_mesh_changed)
         bar.addWidget(QtWidgets.QLabel(" Active: "))
