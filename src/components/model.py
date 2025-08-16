@@ -1,4 +1,4 @@
-from PySide6 import QtCore, QtWidgets
+from PySide6 import QtCore
 
 class MeshModel(QtCore.QObject):
     changed = QtCore.Signal()
