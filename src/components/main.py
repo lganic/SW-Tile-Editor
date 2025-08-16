@@ -246,13 +246,21 @@ class Main(QtWidgets.QWidget):
 
         for it in selected_items:
             if isinstance(it, VertexItem):
-                ensure(verts_to_remove, it.model); verts_to_remove[it.model].add(it.index)
+                ensure(verts_to_remove, it.model)
+                verts_to_remove[it.model].add(it.index)
+
             elif isinstance(it, TriangleItem):
-                ensure(tris_to_remove, it.model);  tris_to_remove[it.model].add(it.tri_index)
+                ensure(tris_to_remove, it.model)
+                tris_to_remove[it.model].add(it.tri_index)
+                # disconnect triangle hooks before nuking
+                try:
+                    it.model.changed.disconnect(it.rebuild_path)
+                except (TypeError, RuntimeError):
+                    pass
 
         # also remove any triangles referencing removed vertices
         for m in self.models:
-            if m not in verts_to_remove: continue
+            if m not in verts_to_remove: continue # there are no vertices to remove, continue
             vset = verts_to_remove[m]
             for tri_idx, tri in enumerate(m.triangles()):
                 if any(v in vset for v in tri):
