@@ -1,6 +1,7 @@
 from PySide6 import QtCore, QtGui, QtWidgets
 
 from .model import MeshModel
+from ..utility import darklight_from_lightcolor
 
 class PreviewWidget(QtWidgets.QWidget):
     def __init__(self, models: list[MeshModel], colors: list[QtGui.QColor]):
@@ -117,11 +118,11 @@ class PreviewWidget(QtWidgets.QWidget):
     def paintEvent(self, e):
         p = QtGui.QPainter(self)
         p.setRenderHint(QtGui.QPainter.Antialiasing)
-        p.fillRect(self.rect(), QtGui.QColor(250, 250, 250))
+        p.fillRect(self.rect(), darklight_from_lightcolor(250, 250, 250))
 
         # draw frame for target area
         tr = self._target_rect()
-        p.setPen(QtGui.QPen(QtGui.QColor(220,220,220)))
+        p.setPen(QtGui.QPen(darklight_from_lightcolor(220,220,220)))
         p.drawRect(tr)
 
         if tr.isEmpty():

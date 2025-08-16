@@ -1,5 +1,7 @@
 from PySide6 import QtCore, QtGui, QtWidgets
 
+from ..utility import darklight_from_lightcolor
+
 class PreviewOverlay(QtWidgets.QGraphicsItem):
     """Draws live helpers: add-vertex ghost + triangle-mode previews."""
     def __init__(self, main_ref):
@@ -10,9 +12,9 @@ class PreviewOverlay(QtWidgets.QGraphicsItem):
         self._mouse = QtCore.QPointF()
 
         # reusable pens/brush
-        self._helper_pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 160), 5)
+        self._helper_pen = QtGui.QPen(darklight_from_lightcolor(0, 0, 0, 160), 5)
         self._helper_pen.setCosmetic(True)
-        self._ghost_pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 180), 5)
+        self._ghost_pen = QtGui.QPen(darklight_from_lightcolor(0, 0, 0, 180), 5)
         self._ghost_pen.setCosmetic(True)
         self._ghost_br = QtGui.QBrush(QtGui.QColor(0, 0, 0, 30))
 

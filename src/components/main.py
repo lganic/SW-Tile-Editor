@@ -5,6 +5,7 @@ from .editor_view import EditorView
 from .preview_widget import PreviewWidget
 from .items import VertexItem
 from .items import TriangleItem
+from ..utility import darklight_from_lightcolor
 
 from PySide6 import QtCore, QtGui, QtWidgets, Shiboken
 
@@ -386,14 +387,17 @@ class Main(QtWidgets.QWidget):
             self.editor.setCursor(QtCore.Qt.ArrowCursor if not self.adding_vertex else QtCore.Qt.CrossCursor)
             return
 
+        pen_color = darklight_from_lightcolor(0, 0, 0)
+        pen_brush = darklight_from_lightcolor(55, 55, 55, 60)
+
         # build a tiny triangle pixmap for the cursor
         size = 20
         pm = QtGui.QPixmap(size, size)
         pm.fill(QtCore.Qt.transparent)
         g = QtGui.QPainter(pm)
         g.setRenderHint(QtGui.QPainter.Antialiasing)
-        g.setPen(QtGui.QPen(QtGui.QColor(255, 255, 255), 2))
-        g.setBrush(QtGui.QBrush(QtGui.QColor(200, 200, 200, 60)))
+        g.setPen(QtGui.QPen(pen_color, 2))
+        g.setBrush(QtGui.QBrush(pen_brush))
         poly = QtGui.QPolygon([QtCore.QPoint(size//2, 0),
                             QtCore.QPoint(size//4, size),
                             QtCore.QPoint(size*3//4, size)])
