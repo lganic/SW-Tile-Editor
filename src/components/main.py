@@ -58,8 +58,8 @@ class Main(QtWidgets.QWidget):
         self.editor = EditorView(self.scene)
         self.editor.setSceneRect(-1000, -1000, 2000, 2000)
 
-        self.editor.sceneMouseMoved.connect(self._on_scene_mouse_moved)   # NEW
-        self.editor.sceneLeftClicked.connect(self._on_scene_left_clicked) # NEW
+        self.editor.sceneMouseMoved.connect(self._on_scene_mouse_moved)
+        self.editor.sceneLeftClicked.connect(self._on_scene_left_clicked)
 
         # Right preview shows all meshes
         self.preview = PreviewWidget(self.models, self.COLORS)
