@@ -1,6 +1,6 @@
 from ..model import MeshModel
 
-from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6 import QtGui, QtWidgets
 
 class TriangleItem(QtWidgets.QGraphicsPathItem):
     def __init__(self, model: MeshModel, tri_index: int, color: QtGui.QColor):
