@@ -27,7 +27,6 @@ class PreviewWidget(QtWidgets.QWidget):
         self._view_inited = False
 
 
-    # --------- Interaction (pan + zoom) ---------
     def mousePressEvent(self, e: QtGui.QMouseEvent):
         if e.button() == QtCore.Qt.LeftButton:
             self._panning = True
@@ -71,7 +70,6 @@ class PreviewWidget(QtWidgets.QWidget):
             self._view_inited = True
         super().resizeEvent(e)
 
-    # --------- Helpers for mapping ---------
     def _target_rect(self):
         margin = 20
         return self.rect().adjusted(margin, margin, -margin, -margin)
@@ -97,7 +95,7 @@ class PreviewWidget(QtWidgets.QWidget):
 
     def _widget_to_world(self, pt: QtCore.QPointF) -> QtCore.QPointF:
         T = self._world_to_device_transform()
-        inv, ok = T.inverted()          # <-- correct order
+        inv, ok = T.inverted()
         return inv.map(pt) if ok else QtCore.QPointF()
 
     def _recenter_to_anchor(self, world_anchor: QtCore.QPointF, widget_pt: QtCore.QPointF):

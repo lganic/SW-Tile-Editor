@@ -101,12 +101,6 @@ class Main(QtWidgets.QWidget):
                 self.models[index].add_triangle(*t)
                 self._add_triangle_item(index)
 
-        # # Seed mesh 0 with a few points and one triangle
-        # for p in [(0,0), (200,0), (120,150), (40,120), (260,100)]:
-        #     self._add_vertex_item(self.active_mesh, QtCore.QPointF(*p))
-        # self.models[0].add_triangle(0, 1, 2)
-        # self._add_triangle_item(0)
-
         # ensure interactivity states reflect active mesh
         self._apply_active_mesh_flags()
 
@@ -126,7 +120,6 @@ class Main(QtWidgets.QWidget):
         self.scene.addItem(it)
         self.mesh_triangle_items[mesh_idx].append(it)
 
-    # ---- selection / tri building ----
     def _on_vertex_clicked(self, mesh_idx: int, idx: int):
         if not self.tri_mode or mesh_idx != self.active_mesh:
             return
@@ -146,7 +139,6 @@ class Main(QtWidgets.QWidget):
                 self.mesh_vertex_items[mesh_idx][v_idx].setTriPickSelected(False)
             self.tri_buffer.clear()
 
-    # ---- toolbar & actions ----
     def _make_toolbar(self):
         bar = QtWidgets.QToolBar()
 
@@ -159,15 +151,14 @@ class Main(QtWidgets.QWidget):
         bar.addSeparator()
 
         add_vert = QtGui.QAction("Add Vertex", bar)
-        add_vert.setCheckable(True)                                     # NEW
+        add_vert.setCheckable(True)
 
         make_tri = QtGui.QAction("Make Triangle", bar)
         make_tri.setCheckable(True)
         del_last_tri = QtGui.QAction("Delete Last Triangle", bar)
         reset_view = QtGui.QAction("Reset View", bar)
 
-        # --- handlers ---
-        def on_add_vertex_toggled(checked):                             # NEW
+        def on_add_vertex_toggled(checked):
             self.adding_vertex = checked
             self.ghost_item.setVisible(checked)
             # avoid rubberband when placing a vertex
@@ -183,8 +174,8 @@ class Main(QtWidgets.QWidget):
                     if v_idx < len(self.mesh_vertex_items[self.active_mesh]):
                         self.mesh_vertex_items[self.active_mesh][v_idx].setTriPickSelected(False)
                 self.tri_buffer.clear()
-            self._update_triangle_cursor(checked)                        # NEW
-            self.overlay.update()                                        # ensure preview clears
+            self._update_triangle_cursor(checked)
+            self.overlay.update()
 
         def on_delete_last_tri():
             if not self.models[self.active_mesh].triangles():
@@ -204,7 +195,7 @@ class Main(QtWidgets.QWidget):
             self.preview.reset_view()
             self.preview.update()
 
-        add_vert.toggled.connect(on_add_vertex_toggled)                  # NEW
+        add_vert.toggled.connect(on_add_vertex_toggled)
         make_tri.toggled.connect(on_make_tri_toggled)
         del_last_tri.triggered.connect(on_delete_last_tri)
         reset_view.triggered.connect(on_reset_view)

@@ -1,9 +1,10 @@
 from PySide6 import QtCore, QtGui, QtWidgets
 
 class EditorView(QtWidgets.QGraphicsView):
+
     deletePressed = QtCore.Signal()
-    sceneMouseMoved = QtCore.Signal(QtCore.QPointF)      # NEW
-    sceneLeftClicked = QtCore.Signal(QtCore.QPointF)     # NEW
+    sceneMouseMoved = QtCore.Signal(QtCore.QPointF)
+    sceneLeftClicked = QtCore.Signal(QtCore.QPointF)
 
     def __init__(self, scene):
         super().__init__(scene)
