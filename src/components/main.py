@@ -6,19 +6,13 @@ from .preview_widget import PreviewWidget
 from .items import VertexItem
 from .items import TriangleItem
 from ..utility import darklight_from_lightcolor
-from ..constants import RENDER_ORDER, SNAP_AMOUNTS
+from ..constants import RENDER_ORDER, SNAP_AMOUNTS, LAYER_COLORS
 
 from PySide6 import QtCore, QtGui, QtWidgets, Shiboken
 
 from sw_ducky import MapGeometry
 
 class Main(QtWidgets.QWidget):
-    COLORS = [
-        QtGui.QColor('#327986'), QtGui.QColor('#3D8E9F'), QtGui.QColor('#48A3B8'),
-        QtGui.QColor('#53B9D1'), QtGui.QColor('#D0D0C6'), QtGui.QColor('#A4B875'),
-        QtGui.QColor('#E3D08D'), QtGui.QColor('#53B9D1'), QtGui.QColor('#FFFFFF'),
-        QtGui.QColor('#8B6E5C'), QtGui.QColor('#583E2D'),
-    ]
 
     def __init__(self):
         super().__init__()
@@ -64,7 +58,7 @@ class Main(QtWidgets.QWidget):
         self.editor.sceneLeftClicked.connect(self._on_scene_left_clicked)
 
         # Right preview shows all meshes
-        self.preview = PreviewWidget(self.models, self.COLORS)
+        self.preview = PreviewWidget(self.models, LAYER_COLORS)
 
         # Splitter
         splitter = QtWidgets.QSplitter()
@@ -107,7 +101,7 @@ class Main(QtWidgets.QWidget):
     # ---- helpers to add items ----
     def _add_vertex_item(self, mesh_idx: int, p: QtCore.QPointF):
         idx = self.models[mesh_idx].add_point(p)
-        color = self.COLORS[mesh_idx]
+        color = LAYER_COLORS[mesh_idx]
         it = VertexItem(self.models[mesh_idx], idx, color)
         it.clicked.connect(lambda i, m=mesh_idx: self._on_vertex_clicked(m, i))
         self.scene.addItem(it)
@@ -116,7 +110,7 @@ class Main(QtWidgets.QWidget):
 
     def _add_triangle_item(self, mesh_idx: int):
         tri_idx = len(self.models[mesh_idx].triangles()) - 1
-        it = TriangleItem(self.models[mesh_idx], tri_idx, self.COLORS[mesh_idx])
+        it = TriangleItem(self.models[mesh_idx], tri_idx, LAYER_COLORS[mesh_idx])
         self.scene.addItem(it)
         self.mesh_triangle_items[mesh_idx].append(it)
 
@@ -323,12 +317,12 @@ class Main(QtWidgets.QWidget):
         # triangles then verts ...
         for mi, m in enumerate(self.models):
             for tri_idx, _ in enumerate(m.triangles()):
-                tri_item = TriangleItem(m, tri_idx, self.COLORS[mi])
+                tri_item = TriangleItem(m, tri_idx, LAYER_COLORS[mi])
                 self.scene.addItem(tri_item)
                 self.mesh_triangle_items[mi].append(tri_item)
 
         for mi, m in enumerate(self.models):
-            color = self.COLORS[mi]
+            color = LAYER_COLORS[mi]
             for idx, pt in enumerate(m.points()):
                 v_item = VertexItem(m, idx, color)
                 v_item.clicked.connect(lambda i, mesh_i=mi: self._on_vertex_clicked(mesh_i, i))
