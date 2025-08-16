@@ -1,6 +1,6 @@
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from model import MeshModel
+from .model import MeshModel
 
 class PreviewWidget(QtWidgets.QWidget):
     def __init__(self, models: list[MeshModel], colors: list[QtGui.QColor]):

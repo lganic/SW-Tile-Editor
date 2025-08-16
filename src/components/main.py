@@ -1,12 +1,14 @@
-from model import MeshModel
-from grid_background import GridBackground
-from preview_overlay import PreviewOverlay
-from editor_view import EditorView
-from preview_widget import PreviewWidget
-from items import VertexItem
-from items import TriangleItem
+from .model import MeshModel
+from .grid_background import GridBackground
+from .preview_overlay import PreviewOverlay
+from .editor_view import EditorView
+from .preview_widget import PreviewWidget
+from .items import VertexItem
+from .items import TriangleItem
 
 from PySide6 import QtCore, QtGui, QtWidgets
+
+from sw_ducky import MapGeometry
 
 class Main(QtWidgets.QWidget):
     COLORS = [
