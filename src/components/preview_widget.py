@@ -21,12 +21,24 @@ class PreviewWidget(QtWidgets.QWidget):
         self.setAttribute(QtCore.Qt.WA_OpaquePaintEvent, True)
 
     def reset_view(self):
-        # "Camera" state
-        self._init_rect = QtCore.QRectF(-500, -500, 1000, 1000)  # requested start bounds
-        self._center = QtCore.QPointF(self._init_rect.center())  # world center
-        self._zoom = 1.0                                         # pixels per world unit
-        self._view_inited = False
+        self._init_rect = QtCore.QRectF(-500, -500, 1000, 1000)
+        self._apply_fit(self._init_rect)   # compute zoom/center now
+        self.update()
 
+    def _apply_fit(self, world_rect: QtCore.QRectF):
+        tr = self._target_rect()
+        self._center = world_rect.center()
+        if tr.width() > 0 and tr.height() > 0 and world_rect.width() > 0 and world_rect.height() > 0:
+            self._zoom = min(tr.width()/world_rect.width(),
+                            tr.height()/world_rect.height())
+        else:
+            self._zoom = 1.0
+        self._view_inited = True
+
+    def resizeEvent(self, e: QtGui.QResizeEvent):
+        if not self._view_inited and self.width() > 0 and self.height() > 0:
+            self._apply_fit(self._init_rect)
+        super().resizeEvent(e)
 
     def mousePressEvent(self, e: QtGui.QMouseEvent):
         if e.button() == QtCore.Qt.LeftButton:
@@ -59,17 +71,6 @@ class PreviewWidget(QtWidgets.QWidget):
 
         self._recenter_to_anchor(mouse_w, e.position())
         self.update()
-
-    def resizeEvent(self, e: QtGui.QResizeEvent):
-        # re-fit initial rect on the very first layout pass
-        if not self._view_inited and self.width() > 0 and self.height() > 0:
-            self._center = self._init_rect.center()
-            target = self._target_rect()
-            if target.width() > 0 and target.height() > 0:
-                self._zoom = min(target.width()/self._init_rect.width(),
-                                 target.height()/self._init_rect.height())
-            self._view_inited = True
-        super().resizeEvent(e)
 
     def _target_rect(self):
         margin = 20
