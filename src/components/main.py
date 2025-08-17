@@ -98,6 +98,7 @@ class Main(QtWidgets.QWidget):
 
         # ensure interactivity states reflect active mesh
         self._apply_active_mesh_flags()
+        self.update_displayed_mesh_info()
 
     # ---- helpers to add items ----
     def _add_vertex_item(self, mesh_idx: int, p: QtCore.QPointF):
@@ -108,6 +109,9 @@ class Main(QtWidgets.QWidget):
         it.dragFinished.connect(self._on_vertex_drag_finished)
         self.scene.addItem(it)
         self.mesh_vertex_items[mesh_idx].append(it)
+
+        self.update_displayed_mesh_info()
+
         return it
 
     def _add_triangle_item(self, mesh_idx: int):
@@ -115,6 +119,8 @@ class Main(QtWidgets.QWidget):
         it = TriangleItem(self.models[mesh_idx], tri_idx, LAYER_COLORS[mesh_idx])
         self.scene.addItem(it)
         self.mesh_triangle_items[mesh_idx].append(it)
+
+        self.update_displayed_mesh_info()
 
     def _on_vertex_clicked(self, mesh_idx: int, idx: int):
         if not self.tri_mode or mesh_idx != self.active_mesh:
@@ -220,7 +226,19 @@ class Main(QtWidgets.QWidget):
         bar.addSeparator()
         bar.addAction(reset_view)
         return bar
+    
+    def update_displayed_mesh_info(self):
+        # Update the displayed info on vertex / edge count to the gui
 
+        for mesh_index in range(11):
+
+            num_verts = len(self.mesh_vertex_items[mesh_index])
+            num_tris  = len(self.mesh_triangle_items[mesh_index])
+
+            # Update tooltip combo box to highlight empty meshes
+            is_empty = (num_verts + num_tris) == 0
+            color = QtGui.QColor(255, 255 - 255 * is_empty, 255 - 255 * is_empty)
+            self.mesh_combo.setItemData(mesh_index, QtGui.QBrush(color), QtCore.Qt.ForegroundRole)
 
     def _on_mesh_changed(self, idx: int):
         if idx == self.active_mesh:  # no-op
@@ -373,6 +391,7 @@ class Main(QtWidgets.QWidget):
             self.scene.addItem(self.overlay)
 
         self._apply_active_mesh_flags()
+        self.update_displayed_mesh_info()
 
 
     def _on_scene_mouse_moved(self, scene_pt: QtCore.QPointF):
