@@ -5,6 +5,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.setWindowTitle("SW Mesh Editor (WIP)")
+
         self.main_widget = Main()
         self.setCentralWidget(self.main_widget)
 
