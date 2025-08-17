@@ -198,6 +198,7 @@ class Main(QtWidgets.QWidget):
                     if v_idx < len(self.mesh_vertex_items[self.active_mesh]):
                         self.mesh_vertex_items[self.active_mesh][v_idx].setTriPickSelected(False)
                 self.tri_buffer.clear()
+            self._apply_active_mesh_flags()     # <- update movability immediately
             self._update_triangle_cursor(checked)
             self.overlay.update()
 
@@ -242,8 +243,9 @@ class Main(QtWidgets.QWidget):
         # Active mesh items: movable/selectable; others: view-only
         for mi in range(11):
             active = (mi == self.active_mesh)
+            movable = active and (not self.tri_mode)  # <- freeze while tri mode
             for it in self.mesh_vertex_items[mi]:
-                it.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, active)
+                it.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, movable)
                 it.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, active)
                 it.setOpacity(1.0 if active else 0.1)
             for it in self.mesh_triangle_items[mi]:
