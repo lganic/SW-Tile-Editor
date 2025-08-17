@@ -25,4 +25,9 @@ class MainWindow(QtWidgets.QMainWindow):
         pref_action = QtGui.QAction("Preferences", self)
         options_menu.addAction(pref_action)
 
+        new_action.triggered.connect(self._on_new_action)
+    
+    def _on_new_action(self):
+        print("new action")
+
 
