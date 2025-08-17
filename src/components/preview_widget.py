@@ -10,7 +10,7 @@ class PreviewWidget(QtWidgets.QWidget):
         self.colors = colors
         for m in self.models:
             m.changed.connect(self.update)
-        self.setMinimumWidth(320)
+        self.setMinimumWidth(500)
 
         self.reset_view()
         # Pan interaction
