@@ -160,7 +160,7 @@ class Main(QtWidgets.QWidget):
         for snap_amount in SNAP_AMOUNTS:
             self.snap_combo.addItem(str(snap_amount))
         
-        self.mesh_combo.currentIndexChanged.connect(self._on_snap_changed)
+        self.snap_combo.currentIndexChanged.connect(self._on_snap_changed)
         
         bar.addWidget(QtWidgets.QLabel(" Snap: "))
         bar.addWidget(self.snap_combo)
