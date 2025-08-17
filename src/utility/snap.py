@@ -9,7 +9,9 @@ def snap_axis(value: float, size: float) -> float:
     I.e: Snapping the value 15.7 with a bounding size of 5, will give the value of 15, since that is the closest value which satisfies: k*S=v where k is an integer, S is 5, and v is 15.7
     '''
 
-    return size * math.floor((value + (size / 2)) / size) # might be an easier way to do this, but this is what I've figured out. 
+    output = size * math.floor((value + (size / 2)) / size) # might be an easier way to do this, but this is what I've figured out. 
+
+    return max(-500, min(500, output)) # Clamp to tile range. 
 
 
 def snap_point(point: QtCore.QPointF, size: float) -> QtCore.QPointF:
