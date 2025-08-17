@@ -5,7 +5,7 @@ from .editor_view import EditorView
 from .preview_widget import PreviewWidget
 from .items import VertexItem
 from .items import TriangleItem
-from ..utility import darklight_from_lightcolor
+from ..utility import darklight_from_lightcolor, snap_point
 from ..constants import RENDER_ORDER, SNAP_AMOUNTS, LAYER_COLORS
 
 from PySide6 import QtCore, QtGui, QtWidgets, Shiboken
@@ -17,6 +17,8 @@ class Main(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("SW Mesh Editor (WIP)")
+
+        self.current_snap_value = SNAP_AMOUNTS[0]
 
         # 11 models
         self.models: list[MeshModel] = [MeshModel() for _ in range(11)]
@@ -158,6 +160,8 @@ class Main(QtWidgets.QWidget):
         for snap_amount in SNAP_AMOUNTS:
             self.snap_combo.addItem(str(snap_amount))
         
+        self.mesh_combo.currentIndexChanged.connect(self._on_snap_changed)
+        
         bar.addWidget(QtWidgets.QLabel(" Snap: "))
         bar.addWidget(self.snap_combo)
         bar.addSeparator()
@@ -228,6 +232,9 @@ class Main(QtWidgets.QWidget):
 
         self.active_mesh = idx
         self._apply_active_mesh_flags()
+
+    def _on_snap_changed(self, idx: int):
+        self.current_snap_value = SNAP_AMOUNTS[idx]
 
     def _apply_active_mesh_flags(self):
         # Active mesh items: movable/selectable; others: view-only
@@ -366,14 +373,14 @@ class Main(QtWidgets.QWidget):
 
     def _on_scene_mouse_moved(self, scene_pt: QtCore.QPointF):
         # Move overlay & ghost
-        self.overlay.setMouse(scene_pt)
+        self.overlay.setMouse(snap_point(scene_pt, self.current_snap_value))
         if self.adding_vertex:
-            self.ghost_item.setPos(scene_pt)
+            self.ghost_item.setPos(snap_point(scene_pt, self.current_snap_value))
 
     def _on_scene_left_clicked(self, scene_pt: QtCore.QPointF):
         # In add-vertex mode, drop a vertex here
         if self.adding_vertex:
-            self._add_vertex_item(self.active_mesh, scene_pt)
+            self._add_vertex_item(self.active_mesh, snap_point(scene_pt, self.current_snap_value))
 
     def _update_triangle_cursor(self, on: bool):
         if not on:
