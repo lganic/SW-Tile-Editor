@@ -372,10 +372,14 @@ class Main(QtWidgets.QWidget):
 
 
     def _on_scene_mouse_moved(self, scene_pt: QtCore.QPointF):
-        # Move overlay & ghost
-        self.overlay.setMouse(snap_point(scene_pt, self.current_snap_value))
+
         if self.adding_vertex:
-            self.ghost_item.setPos(snap_point(scene_pt, self.current_snap_value))
+            scene_pt = snap_point(scene_pt, self.current_snap_value)
+
+        # Move overlay & ghost
+        self.overlay.setMouse(scene_pt)
+        if self.adding_vertex:
+            self.ghost_item.setPos(scene_pt)
 
     def _on_scene_left_clicked(self, scene_pt: QtCore.QPointF):
         # In add-vertex mode, drop a vertex here
