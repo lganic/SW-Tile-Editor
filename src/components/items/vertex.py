@@ -4,6 +4,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 class VertexItem(QtCore.QObject, QtWidgets.QGraphicsEllipseItem):
     clicked = QtCore.Signal(int)
+    dragFinished = QtCore.Signal(object, int, QtCore.QPointF)
 
     def __init__(self, model: MeshModel, index: int, color: QtGui.QColor, radius=6):
         QtCore.QObject.__init__(self)
@@ -45,3 +46,9 @@ class VertexItem(QtCore.QObject, QtWidgets.QGraphicsEllipseItem):
         if e.button() == QtCore.Qt.LeftButton:
             self.clicked.emit(self.index)
         super().mousePressEvent(e)
+
+    def mouseReleaseEvent(self, e: QtWidgets.QGraphicsSceneMouseEvent):
+        super().mouseReleaseEvent(e)
+        if e.button() == QtCore.Qt.LeftButton:
+            # emit the final dropped position in scene coords
+            self.dragFinished.emit(self.model, self.index, self.pos())

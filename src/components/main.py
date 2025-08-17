@@ -106,6 +106,7 @@ class Main(QtWidgets.QWidget):
         color = LAYER_COLORS[mesh_idx]
         it = VertexItem(self.models[mesh_idx], idx, color)
         it.clicked.connect(lambda i, m=mesh_idx: self._on_vertex_clicked(m, i))
+        it.dragFinished.connect(self._on_vertex_drag_finished)
         self.scene.addItem(it)
         self.mesh_vertex_items[mesh_idx].append(it)
         return it
@@ -341,6 +342,7 @@ class Main(QtWidgets.QWidget):
             for idx, pt in enumerate(m.points()):
                 v_item = VertexItem(m, idx, color)
                 v_item.clicked.connect(lambda i, mesh_i=mi: self._on_vertex_clicked(mesh_i, i))
+                v_item.dragFinished.connect(self._on_vertex_drag_finished)
                 self.scene.addItem(v_item)
                 self.mesh_vertex_items[mi].append(v_item)
 
@@ -410,3 +412,15 @@ class Main(QtWidgets.QWidget):
         g.end()
         # hot spot at the tip
         self.editor.setCursor(QtGui.QCursor(pm, size//2, 0))
+
+    def _on_vertex_drag_finished(self, model: MeshModel, idx: int, dropped_pos: QtCore.QPointF):
+        snapped = snap_point(dropped_pos, self.current_snap_value)
+        if snapped != dropped_pos:
+            # Update model and item position. setPos will also trigger itemChange -> set_point; harmless.
+            model.set_point(idx, snapped)
+            sender = self.sender()
+            if isinstance(sender, VertexItem):
+                # avoid duplicate signals while nudging into place
+                sender.blockSignals(True)
+                sender.setPos(snapped)
+                sender.blockSignals(False)
