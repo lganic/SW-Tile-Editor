@@ -2,6 +2,12 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from ..utility import darklight_from_lightcolor
 
 class GridBackground(QtWidgets.QGraphicsItem):
+
+    def __init__(self, line_spacing):
+        super().__init__()
+
+        self.line_spacing = line_spacing
+
     def boundingRect(self):
         return QtCore.QRectF(-1e6, -1e6, 2e6, 2e6)
 
@@ -13,10 +19,17 @@ class GridBackground(QtWidgets.QGraphicsItem):
         bg_color = darklight_from_lightcolor(240, 240, 240)
         p.fillRect(rect, bg_color)
 
-        line_color = darklight_from_lightcolor(25, 25, 25)
+        if self.line_spacing < 1:
+            return # Lines too dense. Probably gonna look like shit anyway.
 
-        p.setPen(QtGui.QPen(line_color))
-        step = 50
+        step = self.line_spacing
+
+        line_color = darklight_from_lightcolor(100, 100, 100)
+
+        line_pen = QtGui.QPen(line_color)
+        line_pen.setCosmetic(True)
+
+        p.setPen(line_pen)
         x0 = int(rect.left())//step*step
         y0 = int(rect.top())//step*step
         for x in range(x0, int(rect.right())+step, step):

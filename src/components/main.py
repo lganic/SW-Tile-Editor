@@ -26,7 +26,7 @@ class Main(QtWidgets.QWidget):
 
         # Scene & view
         self.scene = QtWidgets.QGraphicsScene()
-        self.scene.addItem(GridBackground())
+        self.scene.addItem(GridBackground(self.current_snap_value))
 
         self.overlay = PreviewOverlay(self)
         self.scene.addItem(self.overlay)
@@ -236,6 +236,7 @@ class Main(QtWidgets.QWidget):
 
     def _on_snap_changed(self, idx: int):
         self.current_snap_value = SNAP_AMOUNTS[idx]
+        self._rebuild_scene_all()
 
     def _apply_active_mesh_flags(self):
         # Active mesh items: movable/selectable; others: view-only
@@ -326,7 +327,7 @@ class Main(QtWidgets.QWidget):
 
         self.scene.clear()
 
-        self.scene.addItem(GridBackground())
+        self.scene.addItem(GridBackground(self.current_snap_value))
         for lst in self.mesh_vertex_items: lst.clear()
         for lst in self.mesh_triangle_items: lst.clear()
 
