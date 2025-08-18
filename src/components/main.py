@@ -85,7 +85,11 @@ class Main(QtWidgets.QWidget):
 
         self.editor.deletePressed.connect(self.delete_selected)
 
-        map_geo = MapGeometry.from_file('arid.bin')
+        self.update_displayed_mesh_info()
+
+    def open_bin_file(self, file_path: str):
+
+        map_geo = MapGeometry.from_file(file_path)
 
         for index, key in enumerate(RENDER_ORDER):
 
