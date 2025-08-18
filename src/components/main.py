@@ -186,7 +186,15 @@ class Main(QtWidgets.QWidget):
         reset_view = QtGui.QAction(bar)
         reset_view.setIcon(self.style().standardIcon(QtWidgets.QStyle.SP_BrowserReload))
         reset_view.setToolTip("Reset View")
-        
+
+        undo = QtGui.QAction(bar)
+        undo.setIcon(QtGui.QIcon("assets/undo.png"))
+        undo.setToolTip("Undo")
+
+        redo = QtGui.QAction(bar)
+        redo.setIcon(QtGui.QIcon("assets/redo.png"))
+        redo.setToolTip("Redo")
+
         def on_add_vertex_toggled(checked):
             self.adding_vertex = checked
             self.ghost_item.setVisible(checked)
@@ -225,6 +233,10 @@ class Main(QtWidgets.QWidget):
         bar.addAction(make_tri)
         bar.addSeparator()
         bar.addAction(reset_view)
+        bar.addSeparator()
+        bar.addAction(undo)
+        bar.addSeparator()
+        bar.addAction(redo)
         return bar
     
     def update_displayed_mesh_info(self):
