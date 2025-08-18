@@ -22,6 +22,9 @@ class MainWindow(QtWidgets.QMainWindow):
         file_menu.addSeparator()
         file_menu.addAction(exit_action)
 
+        new_action.setShortcut("Ctrl+N")
+        exit_action.setShortcut("Ctrl+Q")
+
         # Example Options menu
         options_menu = menubar.addMenu("Options")
         pref_action = QtGui.QAction("Preferences", self)
