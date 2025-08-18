@@ -53,7 +53,7 @@ class Main(QtWidgets.QWidget):
         self.scene.addItem(self.border_item)
 
         self.editor = EditorView(self.scene)
-        self.editor.setSceneRect(-1000, -1000, 2000, 2000)
+        self.editor.setSceneRect(-10000, -10000, 20000, 20000)
 
         self.editor.sceneMouseMoved.connect(self._on_scene_mouse_moved)
         self.editor.sceneLeftClicked.connect(self._on_scene_left_clicked)
