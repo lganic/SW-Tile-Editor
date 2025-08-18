@@ -11,12 +11,8 @@ class PreviewOverlay(QtWidgets.QGraphicsItem):
         self._main = main_ref
         self._mouse = QtCore.QPointF()
 
-        # reusable pens/brush
         self._helper_pen = QtGui.QPen(darklight_from_lightcolor(0, 0, 0, 160), 5)
         self._helper_pen.setCosmetic(True)
-        self._ghost_pen = QtGui.QPen(darklight_from_lightcolor(0, 0, 0, 180), 5)
-        self._ghost_pen.setCosmetic(True)
-        self._ghost_br = QtGui.QBrush(QtGui.QColor(0, 0, 0, 30))
 
     def setMouse(self, pt: QtCore.QPointF):
         if pt == self._mouse:
@@ -31,14 +27,8 @@ class PreviewOverlay(QtWidgets.QGraphicsItem):
 
     def paint(self, p, opt, w):
         m = self._main
-        # 1) Add-vertex ghost
-        if m.adding_vertex:
-            r = 6
-            p.setPen(self._ghost_pen)
-            p.setBrush(self._ghost_br)
-            p.drawEllipse(self._mouse, r, r)
 
-        # 2) Triangle-mode previews
+        # Triangle-mode previews
         if m.tri_mode:
             buf = m.tri_buffer
             model = m.models[m.active_mesh]
