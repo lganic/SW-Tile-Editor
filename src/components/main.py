@@ -89,6 +89,8 @@ class Main(QtWidgets.QWidget):
 
     def open_bin_file(self, file_path: str):
 
+        self.clear()
+
         map_geo = MapGeometry.from_file(file_path)
 
         for index, key in enumerate(RENDER_ORDER):
@@ -103,6 +105,14 @@ class Main(QtWidgets.QWidget):
         # ensure interactivity states reflect active mesh
         self._apply_active_mesh_flags()
         self.update_displayed_mesh_info()
+
+    def clear(self):
+
+        for model in self.models:
+
+            model.clear()
+
+        self._rebuild_scene_all()
 
     # ---- helpers to add items ----
     def _add_vertex_item(self, mesh_idx: int, p: QtCore.QPointF):

@@ -33,3 +33,7 @@ class MeshModel(QtCore.QObject):
             return
         self._tris.append((i, j, k))
         self.changed.emit()
+    
+    def clear(self):
+        self._pts.clear()
+        self._tris.clear()
